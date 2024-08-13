@@ -91,9 +91,25 @@
 
 ### 3. 플레이어 캐릭터 mesh와 capsule collision 높이 차이
 플레이어보다 캡슐이 더 높아 불편하다
+
 ->해결 못함..
 
-### 4. Github 사용중 용량 초과
+### 4. Steam OnlineSubsystem 연결과 Achievement 세팅
+Steam OnlineSubsystem 연결 위해서 할것
+1. 플러그인 설치
+2. 빌드 파일에 단어 추가
+
+### 5. Frame dependency 문제
+발매 후 PC방에서 게임을 해보니 SpeedCheckActor의 Floor가 엄청 빠른 속도로 돌다가 Fatal error로 화면이 꺼졌다.
+
+-> 해당 코드의 Rotation Speed에 DeltaTime을 곱하지 않아 발생한 Frame dependency 문제였다.
+
+### 6. 정확하게 360도 회전시키는 법
+5번 문제를 해결했는데 Rotation Speed가 float가 되어 기존 방법은 정확히 360도를 돌지 않았다.
+
+->
+
+
 
 
 
