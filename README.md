@@ -89,6 +89,11 @@
 
 -> 플레이어 캐릭터의 ReachTarget()에서 MyEnemy->Destroy()를 하고 MyEnemy에서도 OnCharacterHit()에 Destroy를 해서 문제가 생겼던 것 같다. **캐릭터 쪽의 Destroy를 지우니까 해결됐다.**
 
+### 3. 플레이어 캐릭터 mesh와 capsule collision 높이 차이
+플레이어보다 캡슐이 더 높아 불편하다
+->해결 못함..
+
+### 4. Github 사용중 용량 초과
 
 
 
