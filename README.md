@@ -111,7 +111,7 @@ AActor* Actor = Cast<AActor>(MyGameMode);
 <br/><br/>
 
 ## 4. Steam OnlineSubsystem 연동과 Achievement 세팅
-Steam 연동 위해서 할것 :
+### Steam 연동 위해서 할것 :
 1. Online Subsystem Steam 플러그인 설치
 2. 빌드 파일에 "OnlineSubsystem", "OnlineSubsystemUtils" 추가
 3. 밑에 Online 주석 처리 지우기
@@ -124,7 +124,7 @@ Steam 연동 위해서 할것 :
 ## 5. Frame dependency 문제
 출시 후 PC방에서 게임을 해보니 SpeedCheckActor의 Floor가 엄청 빠른 속도로 무한 회전하다가 Fatal error로 종료됐다.
 
--> 해당 코드의 Rotation Speed에 DeltaTime을 곱하지 않아 발생한 문제였다.
+-> 해당 코드의 Rotation Speed에 **DeltaTime**을 곱하지 않아 발생한 문제였다.
 https://github.com/cubee021/Know_Your_Limits/blob/07360b2efd52fd5f1cb98b02ae0a4c782fa64959/Project/SpeedCheckActor.cpp#L66-L69
 <br/>
 
@@ -132,26 +132,32 @@ https://github.com/cubee021/Know_Your_Limits/blob/07360b2efd52fd5f1cb98b02ae0a4c
 
 그래서 분명 집 컴퓨터에서는 정상적인데 왜 다른 컴퓨터에서는 안그럴까 고민이 많았다. 몇 주를 찾아 헤맨 끝에 알게 된 이 현상의 이름은 **"Frame dependency"** 
 
--말 그대로 프레임에 의존한다는 뜻이다. 컴퓨터마다 프레임 속도가 다를테니 우리집에서 맞춰놓은 Rotation Speed가 컴퓨터마다 달라질 수밖에. 이 현상을 막아주는 것이 바로 DeltaTime인 것이다👍👍
+-말 그대로 프레임에 의존한다는 뜻이다. 컴퓨터마다 프레임 속도가 다를테니 우리집에서 맞춰놓은 Rotation Speed가 컴퓨터마다 달라질 수밖에. 이 현상을 막아주는 것이 바로 DeltaTime인 것이다👍
 
 나중에 관련 교재를 사보니 기본중의 기본이었다. 지금은 꼬박꼬박 쓰는중
 <br/><br/>
 
 ## 6. 정확하게 360도 회전시키는 법
-5번 문제를 해결하고 곧 또 다른 문제가 생겼다. 원래 Rotation Speed가 int32라서 ```Rotation Speed == 360```에 회전을 멈추는 방식이었다면, 지금은 DeltaTime을 곱하므로 float가 되어 정확히 360이 될 수 없게 되어버린 것이다. (조금 더 가서 멈추거나 아예 계속 회전함)
+5번 문제를 해결하고 곧 또 다른 문제가 생겼다. 원래 Rotation Speed가 int32라서 ```Rotation Speed == 360```에 회전을 멈추는 방식이었다면, 지금은 DeltaTime을 곱하므로 float가 되어 값이 정확히 360일 수 없게 되어버린 것이다. (조금 더 가서 멈추거나 아예 계속 회전함)
 
 -> 이를 해결하기 위해 몇 가지 방법을 시도해봤는데 :
-1. FMath::RInterpTo()
-2. FQuat::Slerp()
-3. 처음 방식 + FQuat::Slerp()
+### 1. FMath::RInterpTo()
 
-1번 - 
++ 장점 : 파라미터 target rotation에 360.f를 직접 집어넣을 수 있어 편리하다. 
++ 단점 : **Gimbal Lock 발생.** 회전하는 Floor mesh의 축 특성상 pitch로 360도를 돌려야 하는데 [pitch의 회전 범위](https://forums.unrealengine.com/t/pitch-rotation-problem/315723)는 -90 ~ +90이라고 한다. 시계방향으로 90도를 넘지 못하고 파들거린다.
 
-장점 : 파라미터 target rotation에 360.f를 직접 집어넣을 수 있어 편리하다. 
+### 2. FQuat::Slerp()
 
-단점 : **Gimbal Lock 발생.** 회전하는 Floor mesh의 축이 잘못되어 
-360도 전까지는 Local Rotation에 더하다가 Slerp()를 사용해 원래 위치로 되돌려 해결
-https://github.com/cubee021/Know_Your_Limits/blob/07360b2efd52fd5f1cb98b02ae0a4c782fa64959/Project/SpeedCheckActor.cpp#L75-L78
++ 장점 : Gimbal Lock이 걸리지 않음.
++ 단점 :
+  1. 0 ~ 270 / 270 ~ 360와 같이 두 번 끊어 사용해야 하는데, 교체되는 순간에 속도가 줄어 이어 붙이기가 어색하다. (함수 자체가 시작, 끝부분에 속도가 줄어든다)
+  2. 파라미터로 Quaternion이 들어가는데, 원리가 어려워서 완벽하게 이해하지는 못하고 그냥 사용했다.
+  3. 모든 Floor가 원래대로 돌아오지는 않았다. (어떤거는 세로로 서있고, 어떤거는 누워는 있는데 90도 돌아가있고..;;) 이를 해결하기 위해 Origin에 초기값 'Pitch, Roll Yaw'를 저장해서 target으로 지정해줬는데도 중간에 이상해진다. 월드에 놓인 축에 따라 양상이 달라지는 것 같은데.. 이유는 잘 모르겠다😥
+
+### 3. 처음 방식 + FQuat::Slerp()
+```Rotation Speed < 360```동안은 AddActorLocalRotation()으로 회전시키고, 이후부터 Slerp()로 Origin에 맞춰서 해결했다. 보간 거리가 짧아서 그런지 단점-3 문제가 생기지 않았다.
+
+https://github.com/cubee021/Know_Your_Limits/blob/07360b2efd52fd5f1cb98b02ae0a4c782fa64959/Project/SpeedCheckActor.cpp#L66-L78
 <br/><br/>
 
 ## 7. 캐릭터 리스폰 시 바닥으로 추락
