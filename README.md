@@ -41,7 +41,6 @@
 
 ### UI
 + [CaptionWidget.h](https://github.com/cubee021/Know_Your_Limits/blob/main/Project/CaptionWidget.h) / [CaptionWidget.cpp](https://github.com/cubee021/Know_Your_Limits/blob/main/Project/CaptionWidget.cpp)
-+ [DeathTrigger.h](https://github.com/cubee021/Know_Your_Limits/blob/main/Project/DeathTrigger.h) / [DeathTrigger.cpp](https://github.com/cubee021/Know_Your_Limits/blob/main/Project/DeathTrigger.cpp)
 + [EndingScreenWidget.h](https://github.com/cubee021/Know_Your_Limits/blob/main/Project/EndingScreenWidget.h) / [EndingScreenWidget.cpp](https://github.com/cubee021/Know_Your_Limits/blob/main/Project/EndingScreenWidget.cpp)
 + [GameOverUserWidget.h](https://github.com/cubee021/Know_Your_Limits/blob/main/Project/GameOverUserWidget.h) / [GameOverUserWidget.cpp](https://github.com/cubee021/Know_Your_Limits/blob/main/Project/GameOverUserWidget.cpp)
 + [GoalScoreUserWidget.h](https://github.com/cubee021/Know_Your_Limits/blob/main/Project/GoalScoreUserWidget.h) / [GoalScoreUserWidget.cpp](https://github.com/cubee021/Know_Your_Limits/blob/main/Project/GoalScoreUserWidget.cpp)
@@ -57,6 +56,7 @@
 + [CaptionTrigger.h](https://github.com/cubee021/Know_Your_Limits/blob/main/Project/CaptionTrigger.h) / [CaptionTrigger.cpp](https://github.com/cubee021/Know_Your_Limits/blob/main/Project/CaptionTrigger.cpp)
 + [CheckPoint.h](https://github.com/cubee021/Know_Your_Limits/blob/main/Project/CheckPoint.h) / [CheckPoint.cpp](https://github.com/cubee021/Know_Your_Limits/blob/main/Project/CheckPoint.cpp)
 + [ClearWall.h](https://github.com/cubee021/Know_Your_Limits/blob/main/Project/ClearWall.h) / [ClearWall.cpp](https://github.com/cubee021/Know_Your_Limits/blob/main/Project/ClearWall.cpp)
++ [DeathTrigger.h](https://github.com/cubee021/Know_Your_Limits/blob/main/Project/DeathTrigger.h) / [DeathTrigger.cpp](https://github.com/cubee021/Know_Your_Limits/blob/main/Project/DeathTrigger.cpp)
 + [GoalActor.h](https://github.com/cubee021/Know_Your_Limits/blob/main/Project/GoalActor.h) / [GoalActor.cpp](https://github.com/cubee021/Know_Your_Limits/blob/main/Project/GoalActor.cpp)
 + [MainMenuPawn.h](https://github.com/cubee021/Know_Your_Limits/blob/main/Project/MainMenuPawn.h) / [MainMenuPawn.cpp](https://github.com/cubee021/Know_Your_Limits/blob/main/Project/MainMenuPawn.cpp)
 + [MoveToMainActor.h](https://github.com/cubee021/Know_Your_Limits/blob/main/Project/MoveToMainActor.h) / [MoveToMainActor.cpp](https://github.com/cubee021/Know_Your_Limits/blob/main/Project/MoveToMainActor.cpp)
@@ -96,7 +96,7 @@ AActor* Actor = Cast<AActor>(MyGameMode);
 
 -> MyEnemy를 Destroy()하는 부분이 두 군데였는데, **한쪽 Destroy를 지우니까 해결됐다.**
 
-[AMyCharacter :: ReachTarget()](https://github.com/cubee021/Know_Your_Limits/blob/main/Project/MyCharacter.cpp)의 끝줄에 MyEnemy->Destroy()를 했었고, [AMyEnemy :: OnCharacterHit()](https://github.com/cubee021/Know_Your_Limits/blob/main/Project/MyEnemy.cp)에서도 Destroy()를 해서 문제가 생겼던 것 같다.
+[AMyCharacter :: ReachTarget()](https://github.com/cubee021/Know_Your_Limits/blob/main/Project/MyCharacter.cpp#L367)의 끝줄에 MyEnemy->Destroy()를 했었고, [AMyEnemy :: OnCharacterHit()](https://github.com/cubee021/Know_Your_Limits/blob/main/Project/MyEnemy.cpp#L107)에서도 Destroy()를 해서 문제가 생겼던 것 같다.
 
 예상하기로는 캐릭터쪽 Destroy로 인해 MyEnemy의 콜리전 메모리가 비정상적으로 해제된 듯🤔
 <br/><br/>
@@ -120,6 +120,8 @@ AActor* Actor = Cast<AActor>(MyGameMode);
 
 [업적 연결 위해 참고한 글](https://www.orfeasel.com/handling-steam-achievements-steam-integration-part-2/)
 **(⭐여기서 사용하는 헤더 안뜨면 NMake에 직접 경로 추가할 것!)**
+
+[구현부](https://github.com/cubee021/Know_Your_Limits/blob/main/Project/MyCharacter.cpp#L556)
 <br/><br/>
 
 ## 5. Frame dependency 문제
@@ -165,6 +167,8 @@ https://github.com/cubee021/Know_Your_Limits/blob/07360b2efd52fd5f1cb98b02ae0a4c
 플레이어 캐릭터가 게임 오버 후 마지막으로 저장된 위치에 리스폰 될 때, SetActorLocation()를 사용했더니 Speed가 그대로 보존되어서 그런지 원래 위치에서 튕겨나가는 일이 많았다🛸
 
 -> TeleportTo() 사용하면 깔끔!
+
+[구현부](https://github.com/cubee021/Know_Your_Limits/blob/main/Project/MyCharacter.cpp#L556)
 <br/><br/>
 
 
