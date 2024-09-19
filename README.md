@@ -10,7 +10,7 @@
 
 <br/>
 
-> + 코드 리팩터링 - 2024.09.13
+> + 코드 리팩터링 - 2024.09.13 ~ 2024.09.19
 >   + 종류별로 폴더 분리
 >   + 클래스별로 기능 분리
 >   + 주석 추가 및 변수 이름 변경
@@ -67,7 +67,7 @@ AActor* Actor = Cast<AActor>(MyGameMode);
 출시 후 PC방에서 게임을 해보니 SpeedCheckActor의 Floor가 엄청 빠른 속도로 무한 회전하다가 Fatal error로 종료됐다.
 
 -> 해당 코드의 Rotation Speed에 **DeltaTime**을 곱하지 않아 발생한 문제였다.
-https://github.com/cubee021/Know_Your_Limits/blob/07360b2efd52fd5f1cb98b02ae0a4c782fa64959/Project/SpeedCheckActor.cpp#L66-L69
+https://github.com/cubee021/Know_Your_Limits/blob/f042f2288fb7c3c01da7dab0720404eb4d8d2642/Project/Interaction/SpeedCheckActor.cpp#L63-L66
 <br/>
 
 > 이전까지는 DeltaTime이 정확히 무엇인지 잘 몰랐다..
@@ -99,7 +99,7 @@ https://github.com/cubee021/Know_Your_Limits/blob/07360b2efd52fd5f1cb98b02ae0a4c
 ### 3. 처음 방식 + FQuat::Slerp()
 ```Rotation Speed < 360```동안은 AddActorLocalRotation()으로 회전시키고, 이후부터 Slerp()로 Origin에 맞춰서 해결했다. 보간 거리가 짧아서 그런지 단점-3 문제가 생기지 않았다.
 
-https://github.com/cubee021/Know_Your_Limits/blob/07360b2efd52fd5f1cb98b02ae0a4c782fa64959/Project/SpeedCheckActor.cpp#L66-L78
+https://github.com/cubee021/Know_Your_Limits/blob/f042f2288fb7c3c01da7dab0720404eb4d8d2642/Project/Interaction/SpeedCheckActor.cpp#L63-L75
 <br/><br/>
 
 ## 7. 캐릭터 리스폰 시 바닥으로 추락
