@@ -23,9 +23,9 @@ void UPauseMenuUserWidget::NativeConstruct()
 	static ConstructorHelpers::FClassFinder<UPauseSettingsUserWidget> UI_HUD(TEXT("WidgetBlueprint'/Game/UI/BP_PauseSettings.BP_PauseSettings_C'"));
 	if (UI_HUD.Succeeded())
 	{
-		HUD_Class = UI_HUD.Class;
+		PauseSettingsClass = UI_HUD.Class;
 
-		PauseSettings = CreateWidget(GetWorld(), HUD_Class);
+		PauseSettings = CreateWidget(GetWorld(), PauseSettingsClass);
 		if (PauseSettings)
 		{
 			PauseSettings->AddToViewport();
@@ -62,7 +62,6 @@ void UPauseMenuUserWidget::Restart()
 	{
 		UGameplayStatics::OpenLevel(this, FName("Map_NorthenIsle_2"));
 	}
-
 }
 
 void UPauseMenuUserWidget::ToOptions()
@@ -73,6 +72,7 @@ void UPauseMenuUserWidget::ToOptions()
 
 void UPauseMenuUserWidget::ToMainMenu()
 {
+	// 플레이어 캐릭터 SetTimer 잔류로 인한 튕김 방지
 	AMyCharacter* MyCharacter = Cast<AMyCharacter>(UGameplayStatics::GetPlayerPawn(this, 0));
 	if (MyCharacter)
 	{
@@ -80,26 +80,18 @@ void UPauseMenuUserWidget::ToMainMenu()
 	}
 
 	AMyPlayerController* MyController = Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
-	AProjectGameModeBase* GameMode = Cast<AProjectGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
-	if (GameMode && MyController) // 이미 있는 UI 불러오는 방법
+	if (MyController)
 	{
-		//UMyUserWidget* MyHUD = Cast<UMyUserWidget>(GameMode->CurrentWidget);
-		//if (MyHUD)
-		//{
-		//	MyHUD->RemoveFromViewport();
-		//}
+		RemoveFromViewport();
+
+		MyController->SetPause(false);
+		MyController->ClientSetCameraFade(true, FColor::Black, FVector2D(0.0, 1.0), 1.5f, false, true);
+
+		GetWorld()->GetTimerManager().SetTimer(OpenLevelTimerHandle, FTimerDelegate::CreateLambda([&]()
+			{
+				UGameplayStatics::OpenLevel(this, FName("MainMenu"));
+			}), 2.f, false);
 
 	}
-
-	RemoveFromViewport();
-
-	MyController->SetPause(false);
-	MyController->ClientSetCameraFade(true, FColor::Black, FVector2D(0.0, 1.0), 1.5f, false, true);
-
-	GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
-		{
-			UGameplayStatics::OpenLevel(this, FName("MainMenu"));
-		}), 2.f, false);
-
 }
 

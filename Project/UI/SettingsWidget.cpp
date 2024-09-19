@@ -118,7 +118,7 @@ void USettingsWidget::Back()
 	}
 
 	AMainMenuGameModeBase* GameMode = Cast<AMainMenuGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
-	if (GameMode) // 이미 있는 UI 불러오는 방법
+	if (GameMode)
 	{
 		UMainMenuUserWidget* Main = Cast<UMainMenuUserWidget>(GameMode->MainMenuUserWidget);
 		if (Main)
@@ -150,21 +150,18 @@ void USettingsWidget::UpdateMasterVolume(float Value)
 {
 	MasterSoundClass->Properties.Volume = Value;
 	UGameplayStatics::PlaySound2D(GetWorld(), MasterTestSound);
-
 }
 
 void USettingsWidget::UpdateAmbientVolume(float Value)
 {
 	AmbientSoundClass->Properties.Volume = Value;
 	UGameplayStatics::PlaySound2D(GetWorld(), AmbientTestSound);
-
 }
 
 void USettingsWidget::UpdateEffectsVolume(float Value)
 {
 	EffectsSoundClass->Properties.Volume = Value;
 	UGameplayStatics::PlaySound2D(GetWorld(), EffectsTestSound);
-
 }
 
 void USettingsWidget::UpdateWindVolume(float Value)

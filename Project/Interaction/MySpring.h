@@ -6,6 +6,9 @@
 #include "GameFramework/Actor.h"
 #include "MySpring.generated.h"
 
+/**
+* 캐릭터가 밟고 뛰어오르는 스프링
+*/
 UCLASS()
 class PROJECT_API AMySpring : public AActor
 {
@@ -15,39 +18,34 @@ public:
 	// Sets default values for this actor's properties
 	AMySpring();
 
+protected:
 	virtual void PostInitializeComponents() override;
 
-private:
+public:
+	// Interact Section
+	UPROPERTY(VisibleAnywhere)
+		class UCapsuleComponent* Trigger;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Mesh)
+		UStaticMeshComponent* Mesh;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Mesh)
+		UMaterial* Material;
+
+protected:
 	UFUNCTION()
 		void OnCharacterHit(UPrimitiveComponent* HitComponent,
 			AActor* OtherActor, UPrimitiveComponent* OtherComponent,
 			FVector NormalImpulse, const FHitResult& Hit);
 
-	UPROPERTY(VisibleAnywhere)
-		class USoundBase* BounceSound;
+	/** 캐릭터 띄우는 속도 */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Velocity)
+		float BounceVelocity = 1500.f;
 
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+	// Sound Section
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Sound)
+		class USoundBase* BounceSound;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
-	UPROPERTY(VisibleAnywhere)
-		UStaticMeshComponent* Spring;
-
-	UPROPERTY(VisibleAnywhere)
-		UMaterial* Mat;
-
-	UPROPERTY(VisibleAnywhere)
-		class UCapsuleComponent* Trigger;
-
-	UPROPERTY(VisibleAnywhere)
-		class UBoxComponent* Box;
-
-	UPROPERTY(VisibleAnywhere)
-		class UWidgetComponent* Crosshair;
-
-
+	void PlayBounceSound();
 };

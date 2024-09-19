@@ -11,16 +11,13 @@
 // Sets default values
 AMyCoinBag::AMyCoinBag()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
-
-	CoinBag = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("RING"));
+	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("RING"));
 	Trigger = CreateDefaultSubobject<UBoxComponent>(TEXT("TRIGGER"));
 
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> SM(TEXT("StaticMesh'/Game/Graphics/Prototype_Project/Meshes/Icons/SM_CoinBag_01_1.SM_CoinBag_01_1'"));
 	if (SM.Succeeded())
 	{
-		CoinBag->SetStaticMesh(SM.Object);
+		Mesh->SetStaticMesh(SM.Object);
 	}
 
 	static ConstructorHelpers::FObjectFinder<USoundBase> SB(TEXT("SoundWave'/Game/Sounds/coin_c_02-102844.coin_c_02-102844'"));
@@ -29,19 +26,12 @@ AMyCoinBag::AMyCoinBag()
 		RingSound = SB.Object;
 	}
 
-	SetRootComponent(CoinBag);
-	Trigger->SetupAttachment(CoinBag);
+	SetRootComponent(Mesh);
+	Trigger->SetupAttachment(Mesh);
 
 	Trigger->SetBoxExtent(FVector(30.0f, 30.0f, 30.0f));
 	Trigger->SetRelativeLocation(FVector(0.f, 0.f, 40.f));
 
-}
-
-// Called when the game starts or when spawned
-void AMyCoinBag::BeginPlay()
-{
-	Super::BeginPlay();
-	
 }
 
 void AMyCoinBag::PostInitializeComponents()
@@ -51,13 +41,6 @@ void AMyCoinBag::PostInitializeComponents()
 	Trigger->OnComponentBeginOverlap.AddDynamic(this, &AMyCoinBag::OnCharacterOverlap);
 }
 
-// Called every frame
-void AMyCoinBag::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}
-
 void AMyCoinBag::OnCharacterOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& Sweepresult)
 {
 	AMyCharacter* MyCharacter = Cast<AMyCharacter>(OtherActor);
@@ -65,7 +48,7 @@ void AMyCoinBag::OnCharacterOverlap(UPrimitiveComponent* OverlappedComp, AActor*
 	{
 		if (!IsOverlappedAlready)
 		{
-			UGameplayStatics::PlaySoundAtLocation(this, RingSound, GetActorLocation());
+			PlayRingSound();
 	
 			int32 RandomCount = FMath::RandRange(0, 20);
 
@@ -85,5 +68,10 @@ void AMyCoinBag::OnCharacterOverlap(UPrimitiveComponent* OverlappedComp, AActor*
 
 	}
 
+}
+
+void AMyCoinBag::PlayRingSound()
+{
+	UGameplayStatics::PlaySoundAtLocation(this, RingSound, GetActorLocation());
 }
 

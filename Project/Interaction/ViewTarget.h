@@ -6,6 +6,10 @@
 #include "GameFramework/Actor.h"
 #include "ViewTarget.generated.h"
 
+/**
+* 캐릭터가 트리거 overlap 시 카메라가 이동 설정 위치로 이동
+* 게임에서는 쓰이지 않음
+*/
 UCLASS()
 class PROJECT_API AViewTarget : public AActor
 {

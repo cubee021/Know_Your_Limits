@@ -10,15 +10,14 @@ AMySpline_01::AMySpline_01()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	Root = CreateDefaultSubobject<USceneComponent>(TEXT("ROOT"));
+	SceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("ROOT"));
 	Spline = CreateDefaultSubobject<USplineComponent>(TEXT("SPLINE"));
 
-	RootComponent = Root;
-	Spline->SetupAttachment(Root);
+	RootComponent = SceneComponent;
+	Spline->SetupAttachment(SceneComponent);
 
-	Spline->Duration = TotalPathTime;
+	Spline->Duration = 10.f;
 	Spline->bDrawDebug = true;
-
 
 	static ConstructorHelpers::FClassFinder<AActor> AA(TEXT("Blueprint'/Game/Blueprints/BP_FloatingFloor.BP_FloatingFloor_C'"));
 	if (AA.Succeeded())
@@ -26,9 +25,7 @@ AMySpline_01::AMySpline_01()
 		ActorToMoveClass = AA.Class;
 	}
 
-	FloorSize = FVector(1.f, 1.f, 1.f);
-
-
+	ActorSize = FVector(1.f, 1.f, 1.f);
 }
 
 // Called when the game starts or when spawned
@@ -38,17 +35,17 @@ void AMySpline_01::BeginPlay()
 
 	if (ActorToMoveClass)
 	{
+		// ¿ùµå¿¡ ActorToMove Spawn
 		ActorToMove = GetWorld()->SpawnActor<AActor>(ActorToMoveClass, Spline->GetComponentTransform());
 		if (ActorToMove)
 		{
-			ActorToMove->SetActorRotation(FloorDegree);
-			ActorToMove->SetActorScale3D(FloorSize);
+			ActorToMove->SetActorRotation(ActorRotation);
+			ActorToMove->SetActorScale3D(ActorSize);
 
 			StartTime = GetWorld()->GetTimeSeconds();
 			bCanMoveActor = true;
 		}
 	}
-	
 }
 
 // Called every frame
@@ -56,16 +53,14 @@ void AMySpline_01::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-
 	if (ActorToMove && bCanMoveActor)
 	{
-		float CurrentSplineTime = (GetWorld()->GetTimeSeconds() - StartTime) / TotalPathTime;
+		float CurrentSplineTime = (GetWorld()->GetTimeSeconds() - StartTime) / Spline->Duration;
 
 		float Distance = Spline->GetSplineLength() *CurrentSplineTime;
 
 		FVector Position = Spline->GetLocationAtDistanceAlongSpline(Distance, ESplineCoordinateSpace::World);
 		ActorToMove->SetActorLocation(Position);
-
 
 		if (CurrentSplineTime >= 1.0f)
 		{
@@ -75,12 +70,9 @@ void AMySpline_01::Tick(float DeltaTime)
 
 				StartTime = GetWorld()->GetTimeSeconds();
 
-				CurrentSplineTime = (GetWorld()->GetTimeSeconds() - StartTime) / TotalPathTime;
-
-
+				CurrentSplineTime = (GetWorld()->GetTimeSeconds() - StartTime) / Spline->Duration;
 			}
 		}
 	}
-
 }
 

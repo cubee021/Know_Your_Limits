@@ -18,13 +18,13 @@ class PROJECT_API AMyAIController : public AAIController
 public:
 	AMyAIController();
 
+
+public:
+	// AI Section
 	virtual void OnPossess(APawn* InPawn) override;
 	virtual void OnUnPossess() override;
 
-
-private:
-	//FTimerHandle TimerHandle;
-
+protected:
 	UPROPERTY()
 		class UBehaviorTree* BehaviorTree;
 

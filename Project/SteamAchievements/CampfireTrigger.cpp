@@ -39,9 +39,7 @@ void ACampfireTrigger::OnCharacterOverlap(UPrimitiveComponent* OverlappedComp, A
 	{
 		MyCharacter->CampfireAchievement();
 		MyCharacter->GameOver();
-
 	}
-
 }
 
 

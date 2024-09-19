@@ -9,8 +9,6 @@
 /**
  * 
  */
-
-
 UCLASS()
 class PROJECT_API UPauseMenuUserWidget : public UUserWidget
 {
@@ -20,14 +18,13 @@ public:
 	UFUNCTION()
 		virtual void NativeConstruct();
 
-
-
 public:
+	/** PauseSettings 困连 积己 */
 	UPROPERTY()
-		TSubclassOf<UUserWidget> HUD_Class; // 困连 努贰胶 历厘
+		TSubclassOf<UUserWidget> PauseSettingsClass;
 
 	UPROPERTY()
-		UUserWidget* PauseSettings; // 困连狼 角力 林家 历厘
+		UUserWidget* PauseSettings;
 
 public:
 	UPROPERTY(meta = (BindWidget))
@@ -42,21 +39,21 @@ public:
 	UPROPERTY(meta = (BindWidget))
 		class UButton* btn_toMain;
 
+	/** Back to game */
 	UFUNCTION()
 		void Resume();
-
+	/** Restart current State */
 	UFUNCTION()
 		void Restart();
-
+	/** Open Options */
 	UFUNCTION()
 		void ToOptions();
-
+	/** Back to Main Menu */
 	UFUNCTION()
 		void ToMainMenu();
 
-
-private:
-	FTimerHandle TimerHandle;
+protected:
+	FTimerHandle OpenLevelTimerHandle;
 
 	
 };

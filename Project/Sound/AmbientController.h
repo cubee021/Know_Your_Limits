@@ -19,18 +19,15 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:
-	void StopAmbient();
-
-	bool IsAmbientPlaying();
-
-private:
+protected:
 	UPROPERTY(VisibleAnywhere)
 		class UAudioComponent* AudioComponent;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Ambient)
 		class USoundBase* Ambient;
 
-
+public:
+	void StopAmbient();
+	bool IsAmbientPlaying();
 
 };

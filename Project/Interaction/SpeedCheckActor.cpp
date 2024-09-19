@@ -17,21 +17,15 @@ ASpeedCheckActor::ASpeedCheckActor()
 	SetRootComponent(Trigger);
 }
 
-
 // Called when the game starts or when spawned
 void ASpeedCheckActor::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	Character = Cast<AMyCharacter>(UGameplayStatics::GetPlayerPawn(this, 0));
-	if(!Character)
-	{
-
-	}
-
 	DegreeSum.Init(0, TargetFloors.Num());
 	IsAligned.Init(false, TargetFloors.Num());
 
+	// 모든 Floor의 원래 FRotator 기록
 	FloorOrigin.Init(FRotator(0, 0, 0), TargetFloors.Num());
 	for (int32 i = 0; i < TargetFloors.Num(); i++)
 	{
@@ -46,6 +40,7 @@ void ASpeedCheckActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	// overlap 시 캐릭터의 속도 추적
 	if (OnOverlap)
 	{
 		if (Character->GetVelocity().Size() > SpeedLimit + 99.99f)
@@ -63,6 +58,8 @@ void ASpeedCheckActor::Tick(float DeltaTime)
 				DegreeSum[i] += DeltaTime * RotationSpeed;
 				if (!IsAligned[i])
 				{
+					// 360도 전에는 DeltaTime * RotationSpeed로 회전.
+					// 360도 직전에 Slerp를 이용해 Floor를 FloorOrigin에 맞춰 틀어지지 않도록 함
 					if (DegreeSum[i] < 360)
 					{
 						FRotator NewRotation = FRotator(DeltaTime * RotationSpeed, 0, 0);
@@ -84,7 +81,7 @@ void ASpeedCheckActor::Tick(float DeltaTime)
 					}
 				}
 
-
+				// 모두 정렬되었으면 회전 종료
 				bool IsAllTrue = true;
 				for (int32 j = 0; j < IsAligned.Num(); j++)
 				{
@@ -108,9 +105,11 @@ void ASpeedCheckActor::NotifyActorBeginOverlap(AActor* OtherActor)
 	AMyCharacter* MyCharacter = Cast<AMyCharacter>(OtherActor);
 	if (MyCharacter)
 	{
+		Character = MyCharacter;
+		ensure(Character);
+
 		OnOverlap = true;
 	}
-
 }
 
 void ASpeedCheckActor::NotifyActorEndOverlap(AActor* OtherActor)

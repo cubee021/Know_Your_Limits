@@ -97,7 +97,6 @@ void UPauseSettingsUserWidget::NativeConstruct()
 
 void UPauseSettingsUserWidget::Back()
 {
-	
 	UMySaveGame* SaveGame = Cast<UMySaveGame>(UGameplayStatics::CreateSaveGameObject(UMySaveGame::StaticClass()));
 	if (SaveGame)
 	{
@@ -118,7 +117,7 @@ void UPauseSettingsUserWidget::Back()
 	}
 	
 	AProjectGameModeBase* GameMode = Cast<AProjectGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
-	if (GameMode) // 이미 있는 UI 불러오는 방법
+	if (GameMode) 
 	{
 		UPauseMenuUserWidget* MyHUD = Cast<UPauseMenuUserWidget>(GameMode->PauseMenuUserWidget);
 		if (MyHUD)
@@ -140,7 +139,6 @@ void UPauseSettingsUserWidget::SoundToDefault()
 	sldr_Ambient->SetValue(1.f);
 	sldr_Effects->SetValue(1.f);
 	sldr_Wind->SetValue(1.f);
-
 }
 
 
@@ -148,14 +146,12 @@ void UPauseSettingsUserWidget::UpdateMasterVolume(float Value)
 {
 	MasterSoundClass->Properties.Volume = Value;
 	UGameplayStatics::PlaySound2D(GetWorld(), MasterTestSound);
-
 }
 
 void UPauseSettingsUserWidget::UpdateAmbientVolume(float Value)
 {
 	AmbientSoundClass->Properties.Volume = Value;
 	UGameplayStatics::PlaySound2D(GetWorld(), AmbientTestSound);
-
 }
 
 void UPauseSettingsUserWidget::UpdateEffectsVolume(float Value)

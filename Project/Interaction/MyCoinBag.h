@@ -6,6 +6,9 @@
 #include "GameFramework/Actor.h"
 #include "MyCoinBag.generated.h"
 
+/**
+* 플레이어가 닿으면 랜덤으로 코인 제공(Max Speed 증가)
+*/
 UCLASS()
 class PROJECT_API AMyCoinBag : public AActor
 {
@@ -16,31 +19,31 @@ public:
 	AMyCoinBag();
 
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
 	virtual void PostInitializeComponents() override;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+public:
+	// Interact Section
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Trigger)
+		class UBoxComponent* Trigger;
 
-private:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Mesh)
+		UStaticMeshComponent* Mesh;
+
+protected:
 	UFUNCTION()
-		void OnCharacterOverlap(UPrimitiveComponent* OverlappedComp,
+		virtual void OnCharacterOverlap(UPrimitiveComponent* OverlappedComp,
 			AActor* OtherActor, UPrimitiveComponent* OtherComp,
 			int32 OtherBodyIndex, bool bFromSweep,
 			const FHitResult& Sweepresult);
 
-	UPROPERTY(VisibleAnywhere)
+	/** Prevents Character overlaps more than one time */
+	bool IsOverlappedAlready = false;
+
+protected:
+	// Sound Section
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Sound)
 		class USoundBase* RingSound;
 
-	UPROPERTY(VisibleAnywhere)
-		UStaticMeshComponent* CoinBag;
-
-	UPROPERTY(VisibleAnywhere)
-		class UBoxComponent* Trigger;
-
-	bool IsOverlappedAlready = false;
+	void PlayRingSound();
 
 };

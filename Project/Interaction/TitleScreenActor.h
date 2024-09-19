@@ -6,6 +6,9 @@
 #include "GameFramework/Actor.h"
 #include "TitleScreenActor.generated.h"
 
+/**
+* 게임 시작 시 타이틀 화면 후 메인 메뉴가 열리도록 하는 액터
+*/
 UCLASS()
 class PROJECT_API ATitleScreenActor : public AActor
 {

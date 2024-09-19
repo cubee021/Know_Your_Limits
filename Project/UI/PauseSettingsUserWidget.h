@@ -14,11 +14,11 @@ class PROJECT_API UPauseSettingsUserWidget : public UUserWidget
 {
 	GENERATED_BODY()
 	
-public:
+protected:
 	UFUNCTION()
 		virtual void NativeConstruct();
 
-private:
+protected:
 	UPROPERTY()
 		class USoundClass* MasterSoundClass;
 
@@ -75,28 +75,27 @@ public:
 	UPROPERTY(meta = (BindWidget))
 		class UCheckBox* CheckBox_Epic;
 
-
-
+// Sound Section
+	/** Save and back to Pause Menu */
 	UFUNCTION()
 		void Back();
-
+	/** Set sound settings to default */
 	UFUNCTION()
 		void SoundToDefault();
-
+	/** Set Master volume */
 	UFUNCTION()
 		void UpdateMasterVolume(float Value);
-
+	/** Set Ambient volume */
 	UFUNCTION()
 		void UpdateAmbientVolume(float Value);
-
+	/** Set Effects volume */
 	UFUNCTION()
 		void UpdateEffectsVolume(float Value);
-
+	/** Set Boost wind sound volume */
 	UFUNCTION()
 		void UpdateWindVolume(float Value);
 
-
-
+// Graphics Section
 	UFUNCTION()
 		void GraphicToLow(bool IsChecked);
 

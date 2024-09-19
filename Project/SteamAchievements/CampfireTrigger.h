@@ -6,6 +6,9 @@
 #include "GameFramework/Actor.h"
 #include "CampfireTrigger.generated.h"
 
+/**
+* 캐릭터와 interact 시 ACH_CAMPFIRE 목표 달성
+*/
 UCLASS()
 class PROJECT_API ACampfireTrigger : public AActor
 {
@@ -27,7 +30,6 @@ public:
 			AActor* OtherActor, UPrimitiveComponent* OtherComp,
 			int32 OtherBodyIndex, bool bFromSweep,
 			const FHitResult& Sweepresult);
-
 
 private:
 	UPROPERTY(VisibleAnywhere)

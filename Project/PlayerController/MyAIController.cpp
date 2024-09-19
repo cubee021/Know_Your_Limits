@@ -31,7 +31,7 @@ void AMyAIController::OnPossess(APawn* InPawn)
 	{
 		if (RunBehaviorTree(BehaviorTree))
 		{
-
+			// UE_LOG(LogTemp, Warning, TEXT("Blackboard and BehaviorTree possess success!"));
 		}
 	}
 }

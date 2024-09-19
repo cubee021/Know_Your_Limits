@@ -22,8 +22,11 @@ public:
 	virtual void SetupInputComponent() override;
 
 public:
+	// Pause Menu Section
+	/** Open/close pause menu */
 	void PauseMenu();
 
+	/** If pressed once - open pause menu, if pressed twice - close pause menu */
 	int32 PressedNum;
 
 protected:

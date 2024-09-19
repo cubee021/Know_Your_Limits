@@ -6,6 +6,10 @@
 #include "GameFramework/Actor.h"
 #include "MyRing.generated.h"
 
+/**
+* 캐릭터가 획득하면 Max Speed 증가
+* Ring -> Coin으로 이름 변경(해야되는데 혼용중)
+*/
 UCLASS()
 class PROJECT_API AMyRing : public AActor
 {
@@ -16,14 +20,23 @@ public:
 	AMyRing();
 
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-
-public:
 	virtual void PostInitializeComponents() override;
 
-private:
+public:
+	// Called every Frame
+	virtual void Tick(float DeltaTime) override;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Rotation)
+		float RotateSpeed = 70.f;
+public:
+	// Interact Section
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		class UBoxComponent* Trigger;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Mesh)
+		UStaticMeshComponent* Mesh;
+
+protected:
 	/** 플레이어와 오버랩 시 플레이어의 속도 증가 */
 	UFUNCTION()
 		void OnCharacterOverlap(UPrimitiveComponent* OverlappedComp,
@@ -31,22 +44,22 @@ private:
 			int32 OtherBodyIndex, bool bFromSweep,
 			const FHitResult& Sweepresult);
 
-	UPROPERTY(VisibleAnywhere)
+	FTimerHandle RespawnTimerHandle;
+	/** 코인 습득 후 리스폰까지 걸리는 시간 */
+	float RespawnTime = 10.f;
+
+protected:
+	// Sound Section
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Sound)
 		class USoundBase* RingSound;
 
-	UPROPERTY(VisibleAnywhere)
-		class UParticleSystem* Sparkle;
+	void PlayRingSound();
 
-public:
-	// Called every Frame
-	virtual void Tick(float DeltaTime) override;
+protected:
+	// Particle Section
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Particle)
+		class UParticleSystem* SparkleParticle;
 
-
-	UPROPERTY(VisibleAnywhere)
-		UStaticMeshComponent* Mesh;
-
-	UPROPERTY(VisibleAnywhere)
-		class UBoxComponent* Trigger; // collision 감지
-
+	void PlaySparkleParticle();
 
 };

@@ -20,13 +20,12 @@ void UMainMenuUserWidget::NativeConstruct()
 void UMainMenuUserWidget::StartGame()
 {
 	UGameplayStatics::OpenLevel(this, FName("Map_NorthenIsle_01"));
-
 }
 
 void UMainMenuUserWidget::ToSettings()
 {
 	AMainMenuGameModeBase* GameMode = Cast<AMainMenuGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
-	if (GameMode) // 이미 있는 UI 불러오는 방법
+	if (GameMode)
 	{
 		USettingsWidget* Options = Cast<USettingsWidget>(GameMode->SettingsWidget);
 		if (Options)
@@ -36,7 +35,6 @@ void UMainMenuUserWidget::ToSettings()
 
 		SetVisibility(ESlateVisibility::Collapsed);
 	}
-
 }
 
 void UMainMenuUserWidget::ExitGame()
