@@ -18,6 +18,12 @@
 
 <br/>
 
+## 📋 포트폴리오에 첨부된 코드
+[SpeedCheckActor.h](https://github.com/cubee021/Know_Your_Limits/blob/main/Project/Interaction/SpeedCheckActor.h) / 
+[SpeedCheckActor.cpp](https://github.com/cubee021/Know_Your_Limits/blob/main/Project/Interaction/SpeedCheckActor.cpp)
+
+<br/>
+
 ## 🚀 Trouble Shooting
 ## 1. 형변환 미스
 ```c++
