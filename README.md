@@ -90,7 +90,7 @@ https://github.com/cubee021/Know_Your_Limits/blob/f042f2288fb7c3c01da7dab0720404
 <br/><br/>
 
 ## 7. 정확하게 360도 회전시키는 법
-5번 문제를 해결하고 곧 또 다른 문제가 생겼다. 원래 Rotation Speed가 int32라서 ```Rotation Speed == 360```에 회전을 멈추는 방식이었다면, 지금은 DeltaTime을 곱하므로 float가 되어 값이 정확히 360일 수 없게 되어버린 것이다. (조금 더 가서 멈추거나 아예 계속 회전함)
+5번 문제를 해결하고 곧 또 다른 문제가 생겼다. 원래 DegreeSum이 int32라서 ```DegreeSum[i] == 360```에 회전을 멈추는 방식이었다면, 지금은 DeltaTime을 곱하므로 float가 되어 값이 정확히 360일 수 없게 되어버린 것이다. (조금 더 가서 멈추거나 아예 계속 회전함)
 
 -> 이를 해결하기 위해 몇 가지 방법을 시도해봤는데 :
 ### 1. FMath::RInterpTo()
