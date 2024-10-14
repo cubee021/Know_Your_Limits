@@ -53,6 +53,7 @@ AActor* Actor = Cast<AActor>(MyGameMode);
 ## 4. 캡션 무한 생성
 [CaptionTrigger](https://github.com/cubee021/Know_Your_Limits/blob/31996161ac37521b5470a50f90fc2dfee7734a1f/Project/Interaction/CaptionTrigger.cpp)는 플레이어가 트리거를 건드리면 화면에 캡션이 뜨게 하는 액터다. 근데 플레이어가 리스폰되거나 왔던 길을 되돌아갈때마다 재차 생성된다.
 <br/>
+
 -> IsAlreadyShown 변수를 설정하여 캐릭터 오버랩 시 한 번 이상 뜨지 않게 체크하면 된다.
 
 https://github.com/cubee021/Know_Your_Limits/blob/31996161ac37521b5470a50f90fc2dfee7734a1f/Project/Interaction/CaptionTrigger.cpp#L54-L61
